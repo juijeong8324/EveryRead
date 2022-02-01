@@ -34,11 +34,11 @@ def UpdateRGBColor(keycode, rgb_color):
 rgb_color = [128,0,0,255,235,205]
 while True:
     img = cv2.imread('test.PNG')
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     lower = (rgb_color[0], rgb_color[1], rgb_color[2])
     upper = (rgb_color[3], rgb_color[4], rgb_color[5])
-    mask = cv2.inRange(hsv, lower, upper)
+    mask = cv2.inRange(rgb, lower, upper)
 
     keycode = cv2.waitKey(30)
     if UpdateRGBColor(keycode, rgb_color):
