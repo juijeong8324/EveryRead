@@ -63,17 +63,50 @@ webToColor.py : main 파일
 ```
 1. 해당 웹페이지 링크로 화면 캡처 : selenium 라이브러리와 크롬 드라이버를 통해 웹페이지 화면을 캡처 
 2. 이미지에서 색깔 추출 : openCV와 KMean 클러스터링을 이용하여 대표 색깔 3개를 추출
-```               
+```           
 
-- TODO
-```
-1. 데이터 더 수집하기 
-2. 시간 문제 해결하기 -> js로 언어로 바꿀까 고민중 
-```
+<br>     
 
-### 참고 자료 
+## 코드 뜯어보기  
+
+### 시간 측정
+<img src="https://user-images.githubusercontent.com/63052097/152330631-5a941a33-f04f-4e24-b091-ba8232255580.png" width=300 />  
+time 라이브러리를 활용하여 시간을 측정해보았다.    
+
+- 첫 번째 time 시점 = url 입력 받고 웹브라우저를 열고 5초동안 대기 후 시점     
+- 두 번째 time 시점 = 해당 웹페이지의 screenshot을 이미지로 저장하고 끝난 시점    
+- 세 번째 time 시점 = screenshot을 imrea 메소드로 처리하고 reshape 메소드로 데이터를 처리하고 끝난 시점     
+- 네 번재 time 시점 = KMeans() 알고리즘으로 학습시키고 난 후의 시점     
+   
+
+첫 번재 두번째 세번째 time은 거의 비슷했고(url을 입력받고 난 후 시각은 대략 4초였다.) 네 번째 tiem은 대략 20초 내외로 걸렸다. 종료시점과 비슷하게 끝난다.        
+
+<br>
+
+### 데이터 feauture 확인
+<img src="https://user-images.githubusercontent.com/63052097/152319219-025fd7de-e6bf-4c0f-88e7-66c11749ed56.png" width=200 />        
+<img src="https://user-images.githubusercontent.com/63052097/152319452-5c4ab934-2077-4115-9992-9b02707083b0.png" width=200 />      
+
+- imread 메소드 실행 후 반환한 결과 값(데이터 프레임이 아닌 넘파이 배열)은 다음과 같았다. 3차원 배열이었으며 각 픽셀(axis0 : 높이의 개수, axis1: 너비의 개수)에 해당하는 rgb 값(axis2)이 리턴되었다.            
+
+<br>     
+
+<img src="https://user-images.githubusercontent.com/63052097/152320109-e3fb945f-f411-49a8-8d08-bdf265e2cc1a.png" width=200 />           
+<img src="https://user-images.githubusercontent.com/63052097/152326403-8099aa7a-ca8c-41c6-9774-96a250c5cbac.png" width=200 />        
+
+- reshape 메소드 실행 후 반환한 결과 값은 다음과 같았다. 2차원 배열이었고 각 픽셀(axis0 : 높이X너비의 개수)에 해당하는 rgb 값(axis1)이 리턴되었다.                  
+- 이때 rgb는 3개의 값을 가지므로 feature는 r,g,b의 각 값이며 3개의 특성을 갖는다는 것을 알 수 있다.       
+
+## 참고 자료 
 - https://www.pyimagesearch.com/2014/05/26/opencv-python-k-means-color-clustering/
 - https://hoood.tistory.com/405
 - https://www.futurememories.se/en/cases/picular
 - https://en.wikipedia.org/wiki/Web_colors#HTML_color_names
--  
+
+## TODO
+
+1. 먼저 관련 논문자료를 읽어보지 못한 것에 대해 아쉬움이 남는다. 특히 데이터를 수집하고 정리하는 일이 어려웠다. 빅데이터에 기반한 어울리는 색채 추천 시스템 이라는 논문을 보고 싶었으나 논문자료가 안 열려서 볼 수 없어 직접 문의해볼 생각이다. https://academic.naver.com/article.naver?doc_id=308062755         
+2. 본래 hsv 색채 공간을 활용하고자 했는데 hsv 시스템을 사용할 경우 KMeans() 모델에서 색 추출하고 결과를 보면 예상 색과 다르게 나와 rgb 시스템을 사용했다. 왜 hsv 시스템을 사용하면 예상 결과가 나오지 않는지 그 원인을 파악해야 한다.       
+3. 데이터 수집          
+4. 위의 프로그램을 실행시켜보면  대략 30초~40초 정도 기다려야 결과를 볼 수 있다. 그런데 https://github.com/lokesh/color-thief color-thief라고 이미지에서 색채를 추출하는 패키지가 있는데 javascript 언어로 구현되어 있고 정말 빠르게 색 추출이 가능하다. 이 코드의 원리를 분석해서 파이썬으로 코드를 계속 구현할지 그냥 아예 javascript로 코드를 작성할지 고민해볼 필요가 있다.       
+ 
